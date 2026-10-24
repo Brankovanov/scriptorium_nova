@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Scriptorium_Nova.Web.Data.Models;
 
+namespace Scriptorium_Nova.Web.Data.Configurations;
+
 public class EntryTypeConfiguration : IEntityTypeConfiguration<EntryType>
 {
     public void Configure(EntityTypeBuilder<EntryType> builder)
