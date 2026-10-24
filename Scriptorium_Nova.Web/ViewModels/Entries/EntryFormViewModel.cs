@@ -32,4 +32,4 @@ public class EntryFormViewModel
 
     public IEnumerable<EntryTypeSelectViewModel> EntryTypes { get; set; }
         = new List<EntryTypeSelectViewModel>();
-}
+}s
