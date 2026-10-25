@@ -16,13 +16,15 @@
     }
 
     <div class="d-flex gap-2">
-        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Edit</a>
-        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger">Delete</a>
-        <a asp-action="Index" class="btn btn-link">Back to entries</a>
+        <a asp-controller="Entries" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Edit</a>
+        <a asp-controller="Entries" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger">Delete</a>
+        <a asp-controller="Entries" asp-action="Index" class="btn btn-link">Back to entries</a>
     </div>
 </div>
 
-<h2>Notes</h2>
+<h2 id="notes">Notes (@Model.Notes.Count()/@EntityValidation.Note.MaxNotesPerEntry)</h2>
+
+<partial name="_NoteForm" model="Model.NewNote" />
 
 @if (!Model.Notes.Any())
 {
@@ -32,12 +34,10 @@ else
 {
     @foreach (NoteViewModel note in Model.Notes)
     {
-        <div class="card mb-2">
-            <div class="card-body">
-                <h6 class="card-title">@note.Title</h6>
-                <p class="card-text" style="white-space: pre-line;">@note.Text</p>
-                <small class="text-muted">@note.CreatedOn.ToString("dd MMM yyyy")</small>
-            </div>
-        </div>
+        <partial name="_NoteItem" model="note" />
     }
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
