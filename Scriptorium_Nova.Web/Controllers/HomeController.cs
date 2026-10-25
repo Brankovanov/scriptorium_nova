@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Scriptorium_Nova.Web.Models;
+using Scriptorium_Nova.Web.ViewModels.Shared;
 
 namespace Scriptorium_Nova.Web.Controllers;
 
