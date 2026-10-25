@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Scriptorium_Nova.Web.Data;
 using Scriptorium_Nova.Web.Services.Implementations;
 using Scriptorium_Nova.Web.Services.Interfaces;
+using Scriptorium_Nova.Web.Data.Seeding;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,5 +41,9 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+using (IServiceScope scope = app.Services.CreateScope())
+{
+    await DatabaseSeeder.SeedAsync(scope.ServiceProvider);
+}
 
 app.Run();
