@@ -24,5 +24,6 @@ public static class EntityValidation
         public const int TitleMaxLength = 40;
         public const int TextMinLength = 10;
         public const int TextMaxLength = 2000;
+        public const int MaxNotesPerEntry = 20;
     }
 }
