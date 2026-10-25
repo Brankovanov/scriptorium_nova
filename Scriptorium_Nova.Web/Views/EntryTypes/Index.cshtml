@@ -1,0 +1,28 @@
+@model IEnumerable<EntryTypeListItemViewModel>
+
+@{
+    ViewData["Title"] = "Entry Types";
+}
+
+<h1 class="mb-3">Entry Types</h1>
+
+<div class="row">
+    @foreach (EntryTypeListItemViewModel type in Model)
+    {
+        <div class="col-md-6 col-lg-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">@type.Name</h5>
+                    @if (!string.IsNullOrWhiteSpace(type.Description))
+                    {
+                        <p class="card-text">@type.Description</p>
+                    }
+                    <span class="badge bg-secondary">@type.EntriesCount entries</span>
+                </div>
+                <div class="card-footer">
+                    <a asp-action="Details" asp-route-id="@type.Id" class="btn btn-sm btn-primary">View entries</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

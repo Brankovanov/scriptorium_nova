@@ -1,0 +1,30 @@
+@model EntryTypeDetailsViewModel
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<h1>@Model.Name</h1>
+
+@if (!string.IsNullOrWhiteSpace(Model.Description))
+{
+    <p class="lead">@Model.Description</p>
+}
+
+<a asp-action="Index" class="btn btn-link px-0 mb-3">Back to types</a>
+
+@if (!Model.Entries.Any())
+{
+    <p class="text-muted">No entries of this type yet.</p>
+}
+else
+{
+    <div class="row">
+        @foreach (EntryListItemViewModel entry in Model.Entries)
+        {
+            <div class="col-md-6 col-lg-4 mb-3">
+                <partial name="_EntryCard" model="entry" />
+            </div>
+        }
+    </div>
+}

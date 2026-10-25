@@ -1,0 +1,14 @@
+@model EntryListItemViewModel
+
+<div class="card h-100">
+    <div class="card-body">
+        <span class="badge bg-secondary mb-2">@Model.EntryTypeName</span>
+        <h5 class="card-title">@Model.Name</h5>
+        <p class="card-text">@Model.Summary</p>
+    </div>
+    <div class="card-footer d-flex gap-2">
+        <a asp-controller="Entries" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-sm btn-primary">Details</a>
+        <a asp-controller="Entries" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
+        <a asp-controller="Entries" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+    </div>
+</div>
