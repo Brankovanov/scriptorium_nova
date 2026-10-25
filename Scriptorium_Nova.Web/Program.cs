@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Scriptorium_Nova.Web.Data;
+using Scriptorium_Nova.Web.Services.Implementations;
+using Scriptorium_Nova.Web.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,9 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
+builder.Services.AddScoped<IEntryTypeService, EntryTypeService>();
+builder.Services.AddScoped<IEntryService, EntryService>();
 
 var app = builder.Build();
 

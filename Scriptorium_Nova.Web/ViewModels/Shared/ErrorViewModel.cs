@@ -1,4 +1,4 @@
-namespace Scriptorium_Nova.Web.Models;
+namespace Scriptorium_Nova.Web.ViewModels.Shared;
 
 public class ErrorViewModel
 {
