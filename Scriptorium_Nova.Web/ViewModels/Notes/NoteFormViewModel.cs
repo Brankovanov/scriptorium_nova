@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Scriptorium_Nova.Web.Common;
+using Scriptorium_Nova.Web.Common.Attributes;
 
 namespace Scriptorium_Nova.Web.ViewModels.Notes;
 
@@ -12,6 +13,7 @@ public class NoteFormViewModel
         EntityValidation.Note.TitleMaxLength,
         MinimumLength = EntityValidation.Note.TitleMinLength,
         ErrorMessage = "Title must be between {2} and {1} characters.")]
+    [MustContainLetter]
     public string Title { get; set; } = null!;
 
     [Required(ErrorMessage = "Please enter the note text.")]
