@@ -32,18 +32,7 @@ else
         @foreach (EntryListItemViewModel entry in Model.Entries)
         {
             <div class="col-md-6 col-lg-4 mb-3">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <span class="badge bg-secondary mb-2">@entry.EntryTypeName</span>
-                        <h5 class="card-title">@entry.Name</h5>
-                        <p class="card-text">@entry.Summary</p>
-                    </div>
-                    <div class="card-footer d-flex gap-2">
-                        <a asp-action="Details" asp-route-id="@entry.Id" class="btn btn-sm btn-primary">Details</a>
-                        <a asp-action="Edit" asp-route-id="@entry.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@entry.Id" class="btn btn-sm btn-outline-danger">Delete</a>
-                    </div>
-                </div>
+                 <partial name="_EntryCard" model="entry" />
             </div>
         }
     </div>
