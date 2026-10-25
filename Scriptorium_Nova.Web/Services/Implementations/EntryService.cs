@@ -3,6 +3,7 @@ using Scriptorium_Nova.Web.Data;
 using Scriptorium_Nova.Web.Data.Models;
 using Scriptorium_Nova.Web.Services.Interfaces;
 using Scriptorium_Nova.Web.ViewModels.Entries;
+using Scriptorium_Nova.Web.ViewModels.Notes;
 
 namespace Scriptorium_Nova.Web.Services.Implementations;
 
@@ -15,19 +16,19 @@ public class EntryService : IEntryService
         this.context = context;
     }
 
-    public async Task<IEnumerable<EntryListItemViewModel>> GetAllAsync(string? search, int? entryTypeId)
+    public async Task<IEnumerable<EntryListItemViewModel>> GetAllAsync(string? searchTerm = null, int? entryTypeId = null)
     {
         IQueryable<Entry> query = context.Entries.AsNoTracking();
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            string term = searchTerm.Trim();
+            query = query.Where(e => e.Name.Contains(term));
+        }
 
         if (entryTypeId.HasValue)
         {
             query = query.Where(e => e.EntryTypeId == entryTypeId.Value);
-        }
-
-        if (!string.IsNullOrWhiteSpace(search))
-        {
-            string term = search.Trim();
-            query = query.Where(e => e.Name.Contains(term));
         }
 
         return await query
@@ -54,9 +55,19 @@ public class EntryService : IEntryService
                 Name = e.Name,
                 Summary = e.Summary,
                 Details = e.Details,
+                CreatedOn = e.CreatedOn,
                 EntryTypeId = e.EntryTypeId,
                 EntryTypeName = e.EntryType.Name,
-                CreatedOn = e.CreatedOn
+                Notes = e.Notes
+                    .OrderByDescending(n => n.CreatedOn)
+                    .Select(n => new NoteViewModel
+                    {
+                        Id = n.Id,
+                        Title = n.Title,
+                        Text = n.Text,
+                        CreatedOn = n.CreatedOn
+                    })
+                    .ToList()
             })
             .FirstOrDefaultAsync();
     }
@@ -76,17 +87,33 @@ public class EntryService : IEntryService
             .FirstOrDefaultAsync();
     }
 
+    public async Task<EntryDeleteViewModel?> GetForDeleteAsync(int id)
+    {
+        return await context.Entries
+            .AsNoTracking()
+            .Where(e => e.Id == id)
+            .Select(e => new EntryDeleteViewModel
+            {
+                Id = e.Id,
+                Name = e.Name,
+                Summary = e.Summary,
+                EntryTypeName = e.EntryType.Name,
+                NotesCount = e.Notes.Count
+            })
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<int> CreateAsync(EntryFormViewModel model)
     {
-        var entry = new Entry
+        Entry entry = new Entry
         {
             Name = model.Name.Trim(),
             Summary = model.Summary.Trim(),
-            Details = model.Details?.Trim(),
+            Details = string.IsNullOrWhiteSpace(model.Details) ? null : model.Details.Trim(),
             EntryTypeId = model.EntryTypeId
         };
 
-        context.Entries.Add(entry);
+        await context.Entries.AddAsync(entry);
         await context.SaveChangesAsync();
 
         return entry.Id;
@@ -103,7 +130,7 @@ public class EntryService : IEntryService
 
         entry.Name = model.Name.Trim();
         entry.Summary = model.Summary.Trim();
-        entry.Details = model.Details?.Trim();
+        entry.Details = string.IsNullOrWhiteSpace(model.Details) ? null : model.Details.Trim();
         entry.EntryTypeId = model.EntryTypeId;
 
         await context.SaveChangesAsync();
@@ -124,32 +151,6 @@ public class EntryService : IEntryService
         await context.SaveChangesAsync();
 
         return true;
-    }
-
-    public async Task<bool> ExistsByNameAsync(string name, int entryTypeId, int? excludeId = null)
-    {
-        string trimmedName = name.Trim();
-
-        return await context.Entries.AnyAsync(e =>
-            e.EntryTypeId == entryTypeId &&
-            e.Name == trimmedName &&
-            (excludeId == null || e.Id != excludeId));
-    }
-
-    public async Task<EntryDeleteViewModel?> GetForDeleteAsync(int id)
-    {
-        return await context.Entries
-            .AsNoTracking()
-            .Where(e => e.Id == id)
-            .Select(e => new EntryDeleteViewModel
-            {
-                Id = e.Id,
-                Name = e.Name,
-                Summary = e.Summary,
-                EntryTypeName = e.EntryType.Name,
-                NotesCount = e.Notes.Count
-            })
-            .FirstOrDefaultAsync();
     }
 
     public async Task<bool> NameExistsInTypeAsync(string name, int entryTypeId, int? excludeEntryId = null)
