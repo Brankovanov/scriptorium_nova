@@ -1,0 +1,43 @@
+@model EntryDetailsViewModel
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="mb-4">
+    <span class="badge bg-secondary">@Model.EntryTypeName</span>
+    <h1>@Model.Name</h1>
+    <p class="lead">@Model.Summary</p>
+    <p class="text-muted">Created on @Model.CreatedOn.ToString("dd MMM yyyy")</p>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Details))
+    {
+        <p style="white-space: pre-line;">@Model.Details</p>
+    }
+
+    <div class="d-flex gap-2">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Edit</a>
+        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger">Delete</a>
+        <a asp-action="Index" class="btn btn-link">Back to entries</a>
+    </div>
+</div>
+
+<h2>Notes</h2>
+
+@if (!Model.Notes.Any())
+{
+    <p class="text-muted">No notes yet.</p>
+}
+else
+{
+    @foreach (NoteViewModel note in Model.Notes)
+    {
+        <div class="card mb-2">
+            <div class="card-body">
+                <h6 class="card-title">@note.Title</h6>
+                <p class="card-text" style="white-space: pre-line;">@note.Text</p>
+                <small class="text-muted">@note.CreatedOn.ToString("dd MMM yyyy")</small>
+            </div>
+        </div>
+    }
+}

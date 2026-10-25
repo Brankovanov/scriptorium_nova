@@ -1,0 +1,23 @@
+@model EntryDeleteViewModel
+
+@{
+    ViewData["Title"] = "Delete Entry";
+}
+
+<h1>Delete Entry</h1>
+
+<div class="alert alert-warning">
+    Are you sure you want to delete <strong>@Model.Name</strong> (@Model.EntryTypeName)?
+    @if (Model.NotesCount > 0)
+    {
+        <div>This will also delete its @Model.NotesCount note(s).</div>
+    }
+</div>
+
+<p>@Model.Summary</p>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-link">Cancel</a>
+</form>

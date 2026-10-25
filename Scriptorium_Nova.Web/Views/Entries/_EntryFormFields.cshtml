@@ -1,0 +1,30 @@
+@model EntryFormViewModel
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="mb-3">
+    <label asp-for="Name" class="form-label"></label>
+    <input asp-for="Name" class="form-control" />
+    <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="EntryTypeId" class="form-label"></label>
+    <select asp-for="EntryTypeId" class="form-select"
+            asp-items="@(new SelectList(Model.EntryTypes, "Id", "Name"))">
+        <option value="0">-- Select a type --</option>
+    </select>
+    <span asp-validation-for="EntryTypeId" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Summary" class="form-label"></label>
+    <textarea asp-for="Summary" class="form-control" rows="3"></textarea>
+    <span asp-validation-for="Summary" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Details" class="form-label"></label>
+    <textarea asp-for="Details" class="form-control" rows="8"></textarea>
+    <span asp-validation-for="Details" class="text-danger"></span>
+</div>

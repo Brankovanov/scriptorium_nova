@@ -1,0 +1,50 @@
+@model EntryIndexViewModel
+
+@{
+    ViewData["Title"] = "Entries";
+}
+
+<h1 class="mb-3">Entries</h1>
+
+<form method="get" asp-action="Index" class="row g-2 mb-4">
+    <div class="col-md-5">
+        <input type="text" name="searchTerm" value="@Model.SearchTerm" class="form-control" placeholder="Search by name..." />
+    </div>
+    <div class="col-md-4">
+        <select name="entryTypeId" class="form-select"
+                asp-items="@(new SelectList(Model.EntryTypes, "Id", "Name", Model.EntryTypeId))">
+            <option value="">All types</option>
+        </select>
+    </div>
+    <div class="col-md-3 d-grid d-md-flex gap-2">
+        <button type="submit" class="btn btn-primary">Search</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Reset</a>
+    </div>
+</form>
+
+@if (!Model.Entries.Any())
+{
+    <p class="text-muted">No entries found.</p>
+}
+else
+{
+    <div class="row">
+        @foreach (EntryListItemViewModel entry in Model.Entries)
+        {
+            <div class="col-md-6 col-lg-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <span class="badge bg-secondary mb-2">@entry.EntryTypeName</span>
+                        <h5 class="card-title">@entry.Name</h5>
+                        <p class="card-text">@entry.Summary</p>
+                    </div>
+                    <div class="card-footer d-flex gap-2">
+                        <a asp-action="Details" asp-route-id="@entry.Id" class="btn btn-sm btn-primary">Details</a>
+                        <a asp-action="Edit" asp-route-id="@entry.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@entry.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
