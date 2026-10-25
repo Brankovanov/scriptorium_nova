@@ -15,16 +15,24 @@ public class EntriesController : Controller
         this.entryTypeService = entryTypeService;
     }
 
-    public async Task<IActionResult> Index(string? search, int? entryTypeId)
+    [HttpGet]
+    public async Task<IActionResult> Index(string? searchTerm, int? entryTypeId)
     {
-        var entries = await entryService.GetAllAsync(search, entryTypeId);
+        EntryIndexViewModel model = new EntryIndexViewModel
+        {
+            Entries = await entryService.GetAllAsync(searchTerm, entryTypeId),
+            EntryTypes = await entryTypeService.GetAllAsync(),
+            SearchTerm = searchTerm,
+            EntryTypeId = entryTypeId
+        };
 
-        return View(entries);
+        return View(model);
     }
 
+    [HttpGet]
     public async Task<IActionResult> Details(int id)
     {
-        var model = await entryService.GetDetailsAsync(id);
+        EntryDetailsViewModel? model = await entryService.GetDetailsAsync(id);
 
         if (model == null)
         {
@@ -37,8 +45,10 @@ public class EntriesController : Controller
     [HttpGet]
     public async Task<IActionResult> Create()
     {
-        var model = new EntryFormViewModel();
-        await FillEntryTypesAsync(model);
+        EntryFormViewModel model = new EntryFormViewModel
+        {
+            EntryTypes = await entryTypeService.GetAllAsync()
+        };
 
         return View(model);
     }
@@ -51,18 +61,17 @@ public class EntriesController : Controller
         {
             if (!await entryTypeService.ExistsAsync(model.EntryTypeId))
             {
-                ModelState.AddModelError(nameof(model.EntryTypeId), "The selected entry type does not exist.");
+                ModelState.AddModelError(nameof(model.EntryTypeId), "The selected type does not exist.");
             }
             else if (await entryService.NameExistsInTypeAsync(model.Name, model.EntryTypeId))
             {
-                ModelState.AddModelError(nameof(model.Name), "An entry with this name already exists in this type.");
+                ModelState.AddModelError(nameof(model.Name), "An entry with this name already exists in the selected type.");
             }
         }
 
         if (!ModelState.IsValid)
         {
-            await FillEntryTypesAsync(model);
-
+            model.EntryTypes = await entryTypeService.GetAllAsync();
             return View(model);
         }
 
@@ -74,14 +83,14 @@ public class EntriesController : Controller
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
-        var model = await entryService.GetForEditAsync(id);
+        EntryFormViewModel? model = await entryService.GetForEditAsync(id);
 
         if (model == null)
         {
             return NotFound();
         }
 
-        await FillEntryTypesAsync(model);
+        model.EntryTypes = await entryTypeService.GetAllAsync();
 
         return View(model);
     }
@@ -94,24 +103,23 @@ public class EntriesController : Controller
         {
             if (!await entryTypeService.ExistsAsync(model.EntryTypeId))
             {
-                ModelState.AddModelError(nameof(model.EntryTypeId), "The selected entry type does not exist.");
+                ModelState.AddModelError(nameof(model.EntryTypeId), "The selected type does not exist.");
             }
             else if (await entryService.NameExistsInTypeAsync(model.Name, model.EntryTypeId, id))
             {
-                ModelState.AddModelError(nameof(model.Name), "An entry with this name already exists in this type.");
+                ModelState.AddModelError(nameof(model.Name), "An entry with this name already exists in the selected type.");
             }
         }
 
         if (!ModelState.IsValid)
         {
-            await FillEntryTypesAsync(model);
-
+            model.EntryTypes = await entryTypeService.GetAllAsync();
             return View(model);
         }
 
-        bool updated = await entryService.EditAsync(id, model);
+        bool edited = await entryService.EditAsync(id, model);
 
-        if (!updated)
+        if (!edited)
         {
             return NotFound();
         }
@@ -122,7 +130,7 @@ public class EntriesController : Controller
     [HttpGet]
     public async Task<IActionResult> Delete(int id)
     {
-        var model = await entryService.GetDetailsAsync(id);
+        EntryDeleteViewModel? model = await entryService.GetForDeleteAsync(id);
 
         if (model == null)
         {
@@ -132,9 +140,8 @@ public class EntriesController : Controller
         return View(model);
     }
 
-    [HttpPost]
+    [HttpPost, ActionName(nameof(Delete))]
     [ValidateAntiForgeryToken]
-    [ActionName("Delete")]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
         bool deleted = await entryService.DeleteAsync(id);
@@ -145,10 +152,5 @@ public class EntriesController : Controller
         }
 
         return RedirectToAction(nameof(Index));
-    }
-
-    private async Task FillEntryTypesAsync(EntryFormViewModel model)
-    {
-        model.EntryTypes = await entryTypeService.GetAllAsync();
     }
 }
