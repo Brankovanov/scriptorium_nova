@@ -154,6 +154,24 @@ public class EntryService : IEntryService
         return true;
     }
 
+    public async Task<IEnumerable<EntryListItemViewModel>> GetRecentAsync(int count)
+    {
+        return await context.Entries
+            .AsNoTracking()
+            .OrderByDescending(e => e.CreatedOn)
+            .ThenByDescending(e => e.Id)
+            .Take(count)
+            .Select(e => new EntryListItemViewModel
+            {
+                Id = e.Id,
+                Name = e.Name,
+                Summary = e.Summary,
+                EntryTypeName = e.EntryType.Name,
+                CreatedOn = e.CreatedOn
+            })
+            .ToListAsync();
+    }
+
     public async Task<bool> NameExistsInTypeAsync(string name, int entryTypeId, int? excludeEntryId = null)
     {
         string trimmed = name.Trim();

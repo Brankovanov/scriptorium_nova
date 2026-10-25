@@ -1,7 +1,51 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using Scriptorium_Nova.Web.ViewModels.Home
+@model HomeIndexViewModel
+
+@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Scriptorium Nova</h1>
-</div>
+<section class="hero p-4 p-md-5 mb-4 text-center">
+    <h1 class="display-5">Scriptorium Nova</h1>
+    <p class="lead mb-4">
+        Keep your fictional universe organized: factions, locations, characters, artifacts and events,
+        each with notes attached.
+    </p>
+    <div class="d-flex flex-column flex-sm-row justify-content-center gap-2">
+        <a asp-controller="Entries" asp-action="Index" class="btn btn-primary btn-lg">Browse entries</a>
+        <a asp-controller="Entries" asp-action="Create" class="btn btn-outline-light btn-lg">Create an entry</a>
+    </div>
+</section>
+
+<section class="mb-4">
+    <h2 class="h4 mb-3">Browse by type</h2>
+    <div class="d-flex flex-wrap gap-2">
+        @foreach (EntryTypeListItemViewModel type in Model.EntryTypes)
+        {
+            <a asp-controller="EntryTypes" asp-action="Details" asp-route-id="@type.Id"
+               class="btn btn-outline-secondary type-pill">
+                @type.Name <span class="badge bg-secondary ms-1">@type.EntriesCount</span>
+            </a>
+        }
+    </div>
+</section>
+
+<section>
+    <h2 class="h4 mb-3">Recently added</h2>
+
+    @if (!Model.RecentEntries.Any())
+    {
+        <p class="text-muted">The Codex is empty. Start by <a asp-controller="Entries" asp-action="Create">creating your first entry</a>.</p>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (EntryListItemViewModel entry in Model.RecentEntries)
+            {
+                <div class="col-md-6 col-lg-4 mb-3">
+                    <partial name="_EntryCard" model="entry" />
+                </div>
+            }
+        </div>
+    }
+</section>
