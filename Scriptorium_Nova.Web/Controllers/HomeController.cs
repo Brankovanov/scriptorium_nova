@@ -1,14 +1,33 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Scriptorium_Nova.Web.ViewModels.Shared;
+using Scriptorium_Nova.Web.Services.Interfaces;
+using Scriptorium_Nova.Web.ViewModels.Home;
 
 namespace Scriptorium_Nova.Web.Controllers;
 
 public class HomeController : Controller
 {
-    public IActionResult Index()
+    private const int RecentEntriesCount = 6;
+
+    private readonly IEntryService entryService;
+    private readonly IEntryTypeService entryTypeService;
+
+    public HomeController(IEntryService entryService, IEntryTypeService entryTypeService)
     {
-        return View();
+        this.entryService = entryService;
+        this.entryTypeService = entryTypeService;
+    }
+
+    public async Task<IActionResult> Index()
+    {
+        HomeIndexViewModel model = new HomeIndexViewModel
+        {
+            RecentEntries = await entryService.GetRecentAsync(RecentEntriesCount),
+            EntryTypes = await entryTypeService.GetAllWithCountAsync()
+        };
+
+        return View(model);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

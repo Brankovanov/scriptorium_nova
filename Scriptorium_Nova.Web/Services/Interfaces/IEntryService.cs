@@ -18,5 +18,7 @@ public interface IEntryService
 
     Task<bool> DeleteAsync(int id);
 
+    Task<IEnumerable<EntryListItemViewModel>> GetRecentAsync(int count);
+
     Task<bool> NameExistsInTypeAsync(string name, int entryTypeId, int? excludeEntryId = null);
 }

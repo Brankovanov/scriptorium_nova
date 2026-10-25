@@ -1,4 +1,14 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string? controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    string? action = ViewContext.RouteData.Values["action"]?.ToString();
+
+    string HomeActive() => controller == "Home" && action == "Index" ? "active" : string.Empty;
+    string EntriesActive() => controller == "Entries" && action != "Create" ? "active" : string.Empty;
+    string CreateActive() => controller == "Entries" && action == "Create" ? "active" : string.Empty;
+    string TypesActive() => controller == "EntryTypes" ? "active" : string.Empty;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,46 +17,47 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Scriptorium_Nova.Web.styles.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Scriptorium Nova</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-expand-md navbar-codex mb-4">
+            <div class="container">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">Scriptorium Nova</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                        aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link @HomeActive()" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Entries" asp-action="Index">Entries</a>
+                            <a class="nav-link @EntriesActive()" asp-controller="Entries" asp-action="Index">Entries</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Entries" asp-action="Create">Create Entry</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="EntryTypes" asp-action="Index">Types</a>
+                            <a class="nav-link @TypesActive()" asp-controller="EntryTypes" asp-action="Index">Types</a>
                         </li>
                     </ul>
+                    <a class="btn btn-sm btn-outline-light @CreateActive()" asp-controller="Entries" asp-action="Create">Create Entry</a>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+
+    <div class="container flex-grow-1">
+        <main role="main" class="pb-4">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer-codex py-3 mt-4">
         <div class="container">
-            &copy; 2026 - Scriptorium Nova
+            &copy; @DateTime.UtcNow.Year - Scriptorium Nova
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
