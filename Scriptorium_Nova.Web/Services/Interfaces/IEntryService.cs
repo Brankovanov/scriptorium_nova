@@ -4,11 +4,13 @@ namespace Scriptorium_Nova.Web.Services.Interfaces;
 
 public interface IEntryService
 {
-    Task<IEnumerable<EntryListItemViewModel>> GetAllAsync(string? search, int? entryTypeId);
+    Task<IEnumerable<EntryListItemViewModel>> GetAllAsync(string? searchTerm = null, int? entryTypeId = null);
 
     Task<EntryDetailsViewModel?> GetDetailsAsync(int id);
 
     Task<EntryFormViewModel?> GetForEditAsync(int id);
+
+    Task<EntryDeleteViewModel?> GetForDeleteAsync(int id);
 
     Task<int> CreateAsync(EntryFormViewModel model);
 
@@ -16,5 +18,5 @@ public interface IEntryService
 
     Task<bool> DeleteAsync(int id);
 
-    Task<bool> ExistsByNameAsync(string name, int entryTypeId, int? excludeId = null);
+    Task<bool> NameExistsInTypeAsync(string name, int entryTypeId, int? excludeEntryId = null);
 }

@@ -53,7 +53,7 @@ public class EntriesController : Controller
             {
                 ModelState.AddModelError(nameof(model.EntryTypeId), "The selected entry type does not exist.");
             }
-            else if (await entryService.ExistsByNameAsync(model.Name, model.EntryTypeId))
+            else if (await entryService.NameExistsInTypeAsync(model.Name, model.EntryTypeId))
             {
                 ModelState.AddModelError(nameof(model.Name), "An entry with this name already exists in this type.");
             }
@@ -96,7 +96,7 @@ public class EntriesController : Controller
             {
                 ModelState.AddModelError(nameof(model.EntryTypeId), "The selected entry type does not exist.");
             }
-            else if (await entryService.ExistsByNameAsync(model.Name, model.EntryTypeId, id))
+            else if (await entryService.NameExistsInTypeAsync(model.Name, model.EntryTypeId, id))
             {
                 ModelState.AddModelError(nameof(model.Name), "An entry with this name already exists in this type.");
             }

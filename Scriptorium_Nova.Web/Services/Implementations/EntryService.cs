@@ -135,4 +135,30 @@ public class EntryService : IEntryService
             e.Name == trimmedName &&
             (excludeId == null || e.Id != excludeId));
     }
+
+    public async Task<EntryDeleteViewModel?> GetForDeleteAsync(int id)
+    {
+        return await context.Entries
+            .AsNoTracking()
+            .Where(e => e.Id == id)
+            .Select(e => new EntryDeleteViewModel
+            {
+                Id = e.Id,
+                Name = e.Name,
+                Summary = e.Summary,
+                EntryTypeName = e.EntryType.Name,
+                NotesCount = e.Notes.Count
+            })
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<bool> NameExistsInTypeAsync(string name, int entryTypeId, int? excludeEntryId = null)
+    {
+        string trimmed = name.Trim();
+
+        return await context.Entries.AnyAsync(e =>
+            e.EntryTypeId == entryTypeId &&
+            e.Name == trimmed &&
+            (excludeEntryId == null || e.Id != excludeEntryId));
+    }
 }
