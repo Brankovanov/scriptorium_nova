@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Scriptorium_Nova.Web.Common;
+using Scriptorium_Nova.Web.Common.Attributes;
 using Scriptorium_Nova.Web.ViewModels.EntryTypes;
 
 namespace Scriptorium_Nova.Web.ViewModels.Entries;
@@ -11,6 +12,7 @@ public class EntryFormViewModel
         EntityValidation.Entry.NameMaxLength,
         MinimumLength = EntityValidation.Entry.NameMinLength,
         ErrorMessage = "Name must be between {2} and {1} characters.")]
+    [MustContainLetter]
     public string Name { get; set; } = null!;
 
     [Required(ErrorMessage = "Please enter a summary.")]
