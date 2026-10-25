@@ -6,14 +6,14 @@ namespace Scriptorium_Nova.Web.ViewModels.Entries;
 
 public class EntryFormViewModel
 {
-    [Required(ErrorMessage = "Name is required.")]
+    [Required(ErrorMessage = "Please enter a name.")]
     [StringLength(
         EntityValidation.Entry.NameMaxLength,
         MinimumLength = EntityValidation.Entry.NameMinLength,
         ErrorMessage = "Name must be between {2} and {1} characters.")]
     public string Name { get; set; } = null!;
 
-    [Required(ErrorMessage = "Summary is required.")]
+    [Required(ErrorMessage = "Please enter a summary.")]
     [StringLength(
         EntityValidation.Entry.SummaryMaxLength,
         MinimumLength = EntityValidation.Entry.SummaryMinLength,
@@ -23,13 +23,11 @@ public class EntryFormViewModel
     [StringLength(
         EntityValidation.Entry.DetailsMaxLength,
         ErrorMessage = "Details cannot exceed {1} characters.")]
-    [DataType(DataType.MultilineText)]
     public string? Details { get; set; }
 
-    [Range(1, int.MaxValue, ErrorMessage = "Please select an entry type.")]
-    [Display(Name = "Entry type")]
+    [Display(Name = "Type")]
+    [Range(1, int.MaxValue, ErrorMessage = "Please select a type.")]
     public int EntryTypeId { get; set; }
 
-    public IEnumerable<EntryTypeSelectViewModel> EntryTypes { get; set; }
-        = new List<EntryTypeSelectViewModel>();
+    public IEnumerable<EntryTypeSelectViewModel> EntryTypes { get; set; } = new List<EntryTypeSelectViewModel>();
 }

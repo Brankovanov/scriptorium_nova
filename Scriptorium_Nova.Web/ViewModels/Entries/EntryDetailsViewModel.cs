@@ -1,4 +1,6 @@
-﻿namespace Scriptorium_Nova.Web.ViewModels.Entries;
+﻿using Scriptorium_Nova.Web.ViewModels.Notes;
+
+namespace Scriptorium_Nova.Web.ViewModels.Entries;
 
 public class EntryDetailsViewModel
 {
@@ -10,9 +12,11 @@ public class EntryDetailsViewModel
 
     public string? Details { get; set; }
 
+    public DateTime CreatedOn { get; set; }
+
     public int EntryTypeId { get; set; }
 
     public string EntryTypeName { get; set; } = null!;
 
-    public DateTime CreatedOn { get; set; }
+    public IEnumerable<NoteViewModel> Notes { get; set; } = new List<NoteViewModel>();
 }
