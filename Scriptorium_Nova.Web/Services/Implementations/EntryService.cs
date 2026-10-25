@@ -58,6 +58,7 @@ public class EntryService : IEntryService
                 CreatedOn = e.CreatedOn,
                 EntryTypeId = e.EntryTypeId,
                 EntryTypeName = e.EntryType.Name,
+                NewNote = new NoteFormViewModel { EntryId = e.Id },
                 Notes = e.Notes
                     .OrderByDescending(n => n.CreatedOn)
                     .Select(n => new NoteViewModel

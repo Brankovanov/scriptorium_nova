@@ -18,5 +18,7 @@ public class EntryDetailsViewModel
 
     public string EntryTypeName { get; set; } = null!;
 
+    public NoteFormViewModel NewNote { get; set; } = new NoteFormViewModel();
+
     public IEnumerable<NoteViewModel> Notes { get; set; } = new List<NoteViewModel>();
 }
