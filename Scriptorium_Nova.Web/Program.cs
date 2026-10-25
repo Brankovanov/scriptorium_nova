@@ -16,6 +16,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<IEntryTypeService, EntryTypeService>();
 builder.Services.AddScoped<IEntryService, EntryService>();
+builder.Services.AddScoped<INoteService, NoteService>();
 
 var app = builder.Build();
 
