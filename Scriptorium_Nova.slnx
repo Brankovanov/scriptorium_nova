@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="ScriptoriumNova.Tests/ScriptoriumNova.Tests.csproj" />
   <Project Path="Scriptorium_Nova.Web/Scriptorium_Nova.Web.csproj" />
 </Solution>
