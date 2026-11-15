@@ -4,12 +4,11 @@ using Scriptorium_Nova.Web.Common;
 
 namespace Scriptorium_Nova.Web.Data.Models;
 
-public class Entry
+public class Entry : AuditableEntity
 {
     public Entry()
     {
         Notes = new HashSet<Note>();
-        CreatedOn = DateTime.UtcNow;
     }
 
     [Key]
@@ -33,8 +32,6 @@ public class Entry
         EntityValidation.Entry.DetailsMaxLength,
         ErrorMessage = "Details cannot exceed {1} characters.")]
     public string? Details { get; set; }
-
-    public DateTime CreatedOn { get; set; }
 
     [ForeignKey(nameof(EntryType))]
     public int EntryTypeId { get; set; }
