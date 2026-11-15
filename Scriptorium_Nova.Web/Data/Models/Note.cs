@@ -4,13 +4,8 @@ using Scriptorium_Nova.Web.Common;
 
 namespace Scriptorium_Nova.Web.Data.Models;
 
-public class Note
+public class Note : AuditableEntity
 {
-    public Note()
-    {
-        CreatedOn = DateTime.UtcNow;
-    }
-
     [Key]
     public int Id { get; set; }
 
@@ -27,8 +22,6 @@ public class Note
         MinimumLength = EntityValidation.Note.TextMinLength,
         ErrorMessage = "Text must be between {2} and {1} characters.")]
     public string Text { get; set; } = null!;
-
-    public DateTime CreatedOn { get; set; }
 
     [ForeignKey(nameof(Entry))]
     public int EntryId { get; set; }
