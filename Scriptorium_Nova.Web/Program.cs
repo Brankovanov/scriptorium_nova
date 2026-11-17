@@ -3,11 +3,17 @@ using Scriptorium_Nova.Web.Data;
 using Scriptorium_Nova.Web.Services.Implementations;
 using Scriptorium_Nova.Web.Services.Interfaces;
 using Scriptorium_Nova.Web.Data.Seeding;
+using Scriptorium_Nova.Web.Common.Filters;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add<DomainExceptionFilter>();
+    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+});
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
