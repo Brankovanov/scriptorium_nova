@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Scriptorium_Nova.Web.Data.Models;
-
 namespace Scriptorium_Nova.Web.Data;
 
 public class ApplicationDbContext : DbContext
