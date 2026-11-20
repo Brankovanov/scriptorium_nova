@@ -1,17 +1,14 @@
 ﻿@model ErrorViewModel
 
 @{
-    ViewData["Title"] = "Something went wrong";
+    ViewData["Title"] = "Access denied";
 }
 
 <div class="text-center py-5">
-    <h1 class="display-4">Something went wrong</h1>
-    <p class="text-muted">An unexpected error occurred while processing your request. Please try again.</p>
-
-    @if (Model.ShowRequestId)
-    {
-        <p class="small text-muted">Request ID: <code>@Model.RequestId</code></p>
-    }
-
-    <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Back to home</a>
+    <h1 class="display-1">403</h1>
+    <h2 class="mb-3">The gates are closed</h2>
+    <p class="text-muted">You do not have permission to do that in this world.</p>
+    <div class="d-flex justify-content-center gap-2">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Back to home</a>
+    </div>
 </div>

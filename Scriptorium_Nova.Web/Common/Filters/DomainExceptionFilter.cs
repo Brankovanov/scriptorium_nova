@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Scriptorium_Nova.Web.Common.Exceptions;
+using Microsoft.AspNetCore.Http;
 
 namespace Scriptorium_Nova.Web.Common.Filters;
 
@@ -25,7 +26,7 @@ public class DomainExceptionFilter : IExceptionFilter
 
             case ForbiddenException ex:
                 _logger.LogInformation("Forbidden: {Message}", ex.Message);
-                context.Result = new ForbidResult();
+                context.Result = new StatusCodeResult(StatusCodes.Status403Forbidden);
                 context.ExceptionHandled = true;
                 break;
         }
