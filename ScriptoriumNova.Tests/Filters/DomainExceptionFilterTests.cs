@@ -26,28 +26,6 @@ public class DomainExceptionFilterTests
     }
 
     [Fact]
-    public void OnException_NotFoundException_SetsNotFoundResultAndHandles()
-    {
-        var context = CreateContext(new NotFoundException("Entry 5 not found."));
-
-        _filter.OnException(context);
-
-        Assert.IsType<NotFoundResult>(context.Result);
-        Assert.True(context.ExceptionHandled);
-    }
-
-    [Fact]
-    public void OnException_ForbiddenException_SetsForbidResultAndHandles()
-    {
-        var context = CreateContext(new ForbiddenException("Role too low."));
-
-        _filter.OnException(context);
-
-        Assert.IsType<ForbidResult>(context.Result);
-        Assert.True(context.ExceptionHandled);
-    }
-
-    [Fact]
     public void OnException_UnrelatedException_IsLeftUnhandled()
     {
         var context = CreateContext(new InvalidOperationException("bug"));

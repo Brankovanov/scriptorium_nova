@@ -26,12 +26,6 @@ public class DomainExceptionFilter : IExceptionFilter
 
             case ForbiddenException ex:
                 _logger.LogInformation("Forbidden: {Message}", ex.Message);
-                context.Result = new ForbidResult();
-                context.ExceptionHandled = true;
-                break;
-
-            case ForbiddenException ex:
-                _logger.LogInformation("Forbidden: {Message}", ex.Message);
                 context.Result = new StatusCodeResult(StatusCodes.Status403Forbidden);
                 context.ExceptionHandled = true;
                 break;
