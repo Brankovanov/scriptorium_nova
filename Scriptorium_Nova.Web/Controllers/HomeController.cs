@@ -39,11 +39,14 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult HttpStatus(int code)
     {
-        if (code == 404)
+        return code switch
         {
-            return View("NotFound");
-        }
-
-        return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            StatusCodes.Status404NotFound => View("NotFound"),
+            StatusCodes.Status403Forbidden => View("Forbidden"),
+            _ => View("Error", new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            })
+        };
     }
 }
